@@ -3,4 +3,4 @@
 from battle.battle import battle
 
 if __name__ == "__main__":
-    battle("nail")
+    battle("nail", times=50, heal_every=20)

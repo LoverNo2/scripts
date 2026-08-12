@@ -2,7 +2,6 @@ import time
 
 from core.actions import click_img, click_pos
 from core.base import find_template, grab_screen, load_template
-from core.overlay import log
 from config.images import (
     img_battle_lose,
     img_battle_start,
@@ -69,7 +68,7 @@ def enter_battle(target):
 
 # 结算战斗胜利
 def settle_win():
-    log("战斗胜利")
+    print("战斗胜利")
     click_pos(pos_battle_end_confirm)
     click_pos(pos_exp_confirm)
     if detect(img_drop):
@@ -78,7 +77,7 @@ def settle_win():
 
 # 结算战斗失败
 def settle_lose():
-    log("战斗失败")
+    print("战斗失败")
     click_pos(pos_battle_end_confirm)
     heal()
 
@@ -101,10 +100,10 @@ def battling():
 def battle(name, times=10, heal_every=10):
     target = TARGETS[name]
     for i in range(times):
-        log(f"-----开始第{i+1}次战斗,目标: {name}-----")
+        print(f"-----开始第{i+1}次战斗,目标: {name}-----")
         result = enter_battle(target)
         if result in ("no_pet", "missed", "fled"):
-            log(f"第{i+1}次战斗取消{result}")
+            print(f"第{i+1}次战斗取消{result}")
             continue
         battling()
         if heal_every > 0 and (i + 1) % heal_every == 0:

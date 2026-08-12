@@ -1,5 +1,3 @@
-"""seer_auto —— 入口:启动左上角日志字幕,按精灵名称调用战斗脚本。"""
-
 from battle.battle import battle
 from core.overlay import start_overlay
 

@@ -5,14 +5,11 @@ from core.base import find_template, grab_screen, load_template
 from core.overlay import log
 from config.images import (
     img_battle_lose,
-    img_battle_lose_confirm,
     img_battle_start,
     img_battle_win,
-    img_battle_win_confirm,
-    img_drop_confirm,
-    img_exp_confirm,
     img_drop,
 )
+
 from config.positions import (
     pos_battle_miss_confirm,
     pos_flee_btn,

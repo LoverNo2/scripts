@@ -25,6 +25,6 @@ pos_heal_btn = (670,670)
 pos_heal_confirm_btn = (720,560)
 pos_heal_close_btn = (670,240)
 
-pos_battle_miss_confirm = (300, 100)
+pos_battle_miss_confirm = (725,560)
 
 pos_skill_1 = (720,730)

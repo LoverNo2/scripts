@@ -22,6 +22,7 @@ def click_img(template, timeout=10.0, interval=0.5):
     while True:
         loc, score = find_template(grab_screen(), tpl, 0.85)
         if loc is not None:
+            log(f"点击 {template} 位置 {loc} 评分 {score}")
             click_position(*loc)
             return loc, score
         if time.time() >= deadline:

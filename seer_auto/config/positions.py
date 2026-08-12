@@ -17,6 +17,9 @@ pos_battle_end_confirm = (720,570)
 # 经验确认按钮
 pos_exp_confirm = (735,650)
 
+# 掉落物确认按钮
+pos_drop_confirm = (720,560)
+
 # 采集确认按钮
 pos_drop_confirm = (720,560)
 

@@ -64,6 +64,16 @@ def screen_size():
     return pyautogui.size()
 
 
+def to_screen_coords(screen, x, y):
+    """把截图内的图像坐标换算为屏幕逻辑坐标。
+
+    macOS 高分屏截图是物理像素(如 2880x1800),而 pyautogui 点击用
+    逻辑坐标(1440x900),不换算会点击到错误位置(约差 2 倍)。
+    """
+    sw, sh = pyautogui.size()
+    return int(x * sw / screen.shape[1]), int(y * sh / screen.shape[0])
+
+
 def click_position(x, y, clicks=1, interval=0.0, button="left", duration=0.0):
     pyautogui.click(x, y, clicks=clicks, interval=interval, button=button, duration=duration)
 

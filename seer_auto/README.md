@@ -2,29 +2,34 @@
 
 基于 Python 的屏幕自动化研究项目，通过「视觉反馈」驱动鼠标操作，实现赛尔号的自动化玩法研究（点击按钮、战斗、刷精灵等）。
 
-## 两种点击模式
-
-| 模式 | 说明 | 核心函数 |
-| ---- | ---- | -------- |
-| 模式一：固定位置点击 | 直接点击屏幕上的固定坐标，适合布局不变的界面 | `click_position(x, y)` |
-| 模式二：图标检测点击 | 实时截屏，用 OpenCV 模板匹配找到图标后点击其中心，适合图标位置会变的界面 | `find_and_click("bag.png")` |
-
-## 目录结构
+## 架构分层
 
 ```
 seer_auto/
-├── main.py               # 入口（点击一次固定位置）
+├── main.py               # 入口：只调用顶层应用方法
 ├── requirements.txt      # 依赖
-├── core/                 # 核心功能（两种点击模式）
-│   ├── __init__.py       # 统一导出
-│   ├── clicker.py        # 模式一：固定位置点击（pyautogui）
-│   ├── screen.py         # 屏幕截图（mss，缺失时回退 pyautogui）
-│   └── matcher.py        # 模式二：图标检测（OpenCV 模板匹配）
+├── core/                 # 分层核心包
+│   ├── base.py           # 底层实现：截图 / 鼠标原语 / 单帧模板匹配
+│   └── actions.py        # 顶层应用方法：供 main 直接使用的完整动作
 ├── config/               # 命名映射表
 │   ├── positions.py      # pos_xxx 坐标映射
 │   └── images.py         # img_xxx 图片映射
 └── assets/               # 图片资源（图标模板 .png）
 ```
+
+| 层 | 文件 | 内容 |
+| -- | ---- | ---- |
+| 顶层应用方法 | `core/actions.py` | `click_pos` / `click_img` / `click_all_img` / `wait_img` |
+| 底层实现 | `core/base.py` | `grab_screen` / `click_position` / `find_template` 等原语 |
+
+## 顶层方法（main 中直接使用）
+
+| 方法 | 作用 | 示例 |
+| ---- | ---- | ---- |
+| `click_pos(pos)` | 模式一：点击固定位置，可传元组或 x,y | `click_pos(pos_bag)` |
+| `click_img(img)` | 模式二：检测图标并点击，检测时间可配置 | `click_img(img_bag, timeout=3.0, interval=0.5)` |
+| `click_all_img(img)` | 检测并点击屏幕上所有匹配图标 | `click_all_img(img_battle)` |
+| `wait_img(img)` | 等待图标出现后点击（默认等 10 秒） | `wait_img(img_bag)` |
 
 ## 命名映射（推荐用法）
 
@@ -39,24 +44,24 @@ img_bag = "bag.png"       # 背包图标
 ```
 
 ```python
-from core import click_position, find_and_click
+from core.actions import click_pos, click_img
 from config.positions import pos_bag
 from config.images import img_bag
 
-click_position(*pos_bag)   # 模式一：点击背包坐标，等价于 click_position(1, 1)
-find_and_click(img_bag)    # 模式二：检测背包图标并点击
+click_pos(pos_bag)   # 模式一：点击背包坐标，等价于 click_pos(1, 1)
+click_img(img_bag)   # 模式二：检测背包图标并点击
 ```
 
 ### 图片检测阶段的时间配置
 
-`find_and_click` 的检测阶段耗时由两个参数控制（均为秒）：
+`click_img` 的检测阶段耗时由两个参数控制（均为秒）：
 
 ```python
-find_and_click(img_bag, timeout=3.0, interval=0.5)
+click_img(img_bag, timeout=3.0, interval=0.5)
 # timeout:  检测阶段总时间预算，超时未找到即放弃（默认 2 秒；0 = 只检测一次）
 # interval: 每轮截图匹配之间的间隔（默认 0.5 秒，应对画面加载延迟）
 
-find_and_click(img_bag, timeout=0)   # 立即检测一次，找不到就返回，不等待
+click_img(img_bag, timeout=0)   # 立即检测一次，找不到就返回，不等待
 ```
 
 ## 安装
@@ -70,9 +75,10 @@ pip install -r requirements.txt
 
 ## 使用流程
 
-1. **准备坐标**：运行 `python3 main.py` 前，把真实坐标填进 `config/positions.py`。
+1. **准备坐标**：把真实坐标填进 `config/positions.py`。
 2. **准备图标**：截屏裁剪目标图标，保存到 `assets/` 目录（如 `assets/bag.png`），然后在 `config/images.py` 中登记名字。
-3. **运行**：`python3 main.py`（点击 `pos_click` 指向的坐标一次）。
+3. **编写动作**：在 `main.py` 中用顶层方法组合你的流程。
+4. **运行**：`python3 main.py`。
 
 ## 安全提示
 

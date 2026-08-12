@@ -1,8 +1,4 @@
-# 鼠标键盘控制（跨平台，macOS 需授予辅助功能权限）
 pyautogui>=0.9.54
-# 屏幕截图（比 pyautogui.screenshot 快）
 mss>=9.0.1
-# 图像处理与模板匹配
 opencv-python>=4.8.0
-# numpy（opencv 与 mss 的依赖）
 numpy>=1.24.0

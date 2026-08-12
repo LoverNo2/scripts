@@ -8,6 +8,8 @@ import pyautogui
 pyautogui.FAILSAFE = True
 pyautogui.PAUSE = 0.05
 
+from env import VIEW_SIZE, view_left, view_top, view_width
+
 try:
     from mss import mss
 
@@ -74,6 +76,16 @@ def to_screen_coords(screen, x, y):
     return int(x * sw / screen.shape[1]), int(y * sh / screen.shape[0])
 
 
+def viewport_to_screen(x, y):
+    """把相对游戏视口左上角的配置坐标换算为屏幕坐标。
+
+    视口固有比例 VIEW_SIZE(1440x840),运行时按 view_width 等比缩放:
+    scale = view_width / 1440, 屏幕坐标 = 视口左上角 + 配置坐标 * scale。
+    """
+    scale = view_width / VIEW_SIZE[0]
+    return int(view_left + x * scale), int(view_top + y * scale)
+
+
 def click_position(x, y, clicks=1, interval=0.0, button="left", duration=0.0):
     pyautogui.click(x, y, clicks=clicks, interval=interval, button=button, duration=duration)
 
@@ -108,13 +120,23 @@ TEMPLATES_DIR = PROJECT_ROOT / "assets"
 
 
 def load_template(template_path):
+    """读取图标模板,并按当前视口缩放比例等比缩放后返回。
+
+    约定:assets/ 下的模板基于 VIEW_SIZE(1440 宽)视口裁剪;
+    视口宽度调整后,图标实际尺寸变为 原尺寸 * view_width / 1440,
+    这里自动缩放,保证旧模板在新视口下仍能匹配。
+    """
     path = Path(template_path)
     if not path.is_absolute():
         path = TEMPLATES_DIR / path
     img = cv2.imread(str(path), cv2.IMREAD_UNCHANGED)
     if img is None:
         raise FileNotFoundError(f"无法读取图标模板: {path}")
-    return to_bgr(img)
+    tpl = to_bgr(img)
+    scale = view_width / VIEW_SIZE[0]
+    if abs(scale - 1) > 0.01:
+        tpl = cv2.resize(tpl, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
+    return tpl
 
 
 def find_template(screen, template, threshold=0.85):

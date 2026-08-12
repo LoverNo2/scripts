@@ -27,9 +27,9 @@ seer_auto/
 | 方法 | 作用 | 示例 |
 | ---- | ---- | ---- |
 | `click_pos(pos)` | 模式一：点击固定位置，可传元组或 x,y | `click_pos(pos_bag)` |
-| `click_img(img)` | 模式二：检测图标并点击，检测时间可配置 | `click_img(img_bag, timeout=3.0, interval=0.5)` |
+| `click_img(img)` | 模式二：检测图标并点击一次，检测时间可配置 | `click_img(img_bag, timeout=3.0, interval=0.5)` |
 | `click_all_img(img)` | 检测并点击屏幕上所有匹配图标 | `click_all_img(img_battle)` |
-| `wait_img(img)` | 等待图标出现后点击（默认等 10 秒） | `wait_img(img_bag)` |
+| `wait_img(img)` | 等待图标出现后点击一次 | `wait_img(img_bag)` |
 
 ## 命名映射（推荐用法）
 
@@ -54,15 +54,16 @@ click_img(img_bag)   # 模式二：检测背包图标并点击
 
 ### 图片检测阶段的时间配置
 
-`click_img` 的检测阶段耗时由两个参数控制（均为秒）：
+`click_img` 只接收三个参数：图片映射名（必填）、最大检测时间、单次检测失败后的等待时间：
 
 ```python
-click_img(img_bag, timeout=3.0, interval=0.5)
-# timeout:  检测阶段总时间预算，超时未找到即放弃（默认 2 秒；0 = 只检测一次）
-# interval: 每轮截图匹配之间的间隔（默认 0.5 秒，应对画面加载延迟）
-
-click_img(img_bag, timeout=0)   # 立即检测一次，找不到就返回，不等待
+click_img(img_bag)                       # 默认:最多检测 10 秒,失败后等 0.5 秒重试
+click_img(img_bag, timeout=3.0)          # 最多检测 3 秒
+click_img(img_bag, timeout=0)            # 立即检测一次,找不到就返回
+click_img(img_bag, timeout=3.0, interval=1.0)   # 失败后等 1 秒再检测
 ```
+
+匹配阈值内部固定为 0.85，检测到图标后点击一次并返回。
 
 ## 安装
 
@@ -83,5 +84,5 @@ pip install -r requirements.txt
 ## 安全提示
 
 - 脚本默认开启 pyautogui 的 FailSafe：操作过程中把鼠标快速甩到屏幕左上角可紧急终止。
-- 模板匹配阈值建议在 0.8~0.9 之间调试：过低会误点，过高会漏点。
+- `click_img` 匹配阈值固定为 0.85；若经常匹配不到，重新裁剪更清晰的图标模板。
 - 图标模板必须与游戏内实际显示一致（尺寸、颜色），不同分辨率下需重新裁剪。

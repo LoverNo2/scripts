@@ -119,3 +119,21 @@ def find_template(screen, template, threshold=0.85):
         return (center_x, center_y), max_val
     return None, max_val
 
+
+def find_all_templates(screen, template, threshold=0.85, max_matches=5, min_distance=20):
+    h, w = template.shape[:2]
+    work = to_bgr(screen).copy()
+    template = to_bgr(template)
+    matches = []
+    for _ in range(max_matches):
+        loc, score = find_template(work, template, threshold)
+        if loc is None:
+            break
+        matches.append((loc, score))
+        x, y = loc[0] - w // 2, loc[1] - h // 2
+        pad = max(min_distance, 1)
+        y0, y1 = max(0, y - pad), min(work.shape[0], y + h + pad)
+        x0, x1 = max(0, x - pad), min(work.shape[1], x + w + pad)
+        work[y0:y1, x0:x1] = 0
+    return matches
+

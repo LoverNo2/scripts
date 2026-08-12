@@ -45,7 +45,7 @@ def flee():
     print("逃跑:点击逃跑按钮")
     click_pos(pos_flee_btn)
     print("逃跑:点击确认逃跑按钮")
-    click_pos(pos_flee_confirm_btn)
+    click_pos(pos_flee_confirm_btn, sleep=0.5)
     print("逃跑:点击逃跑成功按钮")
     click_pos(pos_flee_success_btn)
     print("逃跑完成")

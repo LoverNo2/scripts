@@ -1,30 +1,30 @@
 
 
 # 逃跑按钮
-pos_flee_btn = (1350, 790)
+pos_flee_btn = (1688, 988)
 # 逃跑确认按钮
-pos_flee_confirm_btn = (620,530)
+pos_flee_confirm_btn = (775, 662)
 # 逃跑成功按钮
-pos_flee_success_btn = (725,530)
+pos_flee_success_btn = (906, 662)
 
 # 战斗结束确认按钮
-pos_battle_end_confirm = (720,540)
+pos_battle_end_confirm = (900, 675)
 
 
 # 经验确认按钮
-pos_exp_confirm = (735,620)
+pos_exp_confirm = (919, 775)
 
 # 掉落物确认按钮
-pos_drop_confirm = (720,530)
+pos_drop_confirm = (900, 662)
 
 # 采集确认按钮
-pos_drop_confirm = (720,530)
+pos_drop_confirm = (900, 662)
 
-pos_heal_bag = (1250,800)
-pos_heal_btn = (670,640)
-pos_heal_confirm_btn = (720,530)
-pos_heal_close_btn = (670,210)
+pos_heal_bag = (1562, 1000)
+pos_heal_btn = (838, 800)
+pos_heal_confirm_btn = (900, 662)
+pos_heal_close_btn = (838, 262)
 
-pos_battle_miss_confirm = (725,530)
+pos_battle_miss_confirm = (906, 662)
 
-pos_skill_1 = (720,700)
+pos_skill_1 = (900, 875)

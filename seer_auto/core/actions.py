@@ -24,12 +24,11 @@ def click_img(template, timeout=10.0, interval=0.5):
     while True:
         screen = grab_screen()
         loc, score = find_template(screen, tpl, 0.9)
-
         if loc is not None:
             x, y = to_screen_coords(screen, *loc)
             click_position(x, y)
             return (x, y), score
         if time.time() >= deadline:
-            return None, None
+            return None
         if interval > 0:
             time.sleep(interval)

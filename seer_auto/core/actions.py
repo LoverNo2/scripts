@@ -27,3 +27,16 @@ def click_img(template, timeout=10.0, interval=0.5):
             return None, None
         if interval > 0:
             time.sleep(interval)
+
+
+def click_all_img(template, threshold=0.85, region=None, max_matches=5):
+    tpl = load_template(template)
+    screen = grab_screen(region)
+    matches = find_all_templates(screen, tpl, threshold, max_matches)
+    for (x, y), _score in matches:
+        click_position(x, y)
+    return matches
+
+
+def wait_img(template, timeout=10.0, interval=0.5):
+    return click_img(template, timeout=timeout, interval=interval)

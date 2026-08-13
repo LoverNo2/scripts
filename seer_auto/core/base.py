@@ -98,7 +98,7 @@ def right_click(x, y, duration=0.0):
     click_position(x, y, clicks=1, button="right", duration=duration)
 
 
-def move_to(x, y, duration=0.1):
+def move_to(x, y=None, duration=0.1):
     if y is None:
         x, y = x
     x, y = viewport_to_screen(x, y)

@@ -6,7 +6,7 @@ pos_map_back = (1460,260)
 #                      pos_layer2: 第二层点击位置, pos_layer3: 第三层点击位置}
 GALAXIES = {
     "pano": {
-        "pos": (100, 100),
+        "pos": (412, 338),
         "planets": {
             "klose": {
                 "drag": (890, 580),

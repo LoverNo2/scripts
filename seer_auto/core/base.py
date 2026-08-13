@@ -99,12 +99,20 @@ def right_click(x, y, duration=0.0):
 
 
 def move_to(x, y, duration=0.1):
+    if y is None:
+        x, y = x
+    x, y = viewport_to_screen(x, y)
     pyautogui.moveTo(x, y, duration=duration)
 
 
 def drag(x1, y1, x2, y2, duration=0.3):
     pyautogui.moveTo(x1, y1, duration=duration / 2)
     pyautogui.dragTo(x2, y2, duration=duration / 2, button="left")
+
+
+def drag_rel(dx, dy, duration=0.3):
+    dx, dy = viewport_to_screen(dx, dy)
+    pyautogui.dragRel(int(dx), int(dy), duration=duration)
 
 
 def scroll(clicks, x=None, y=None):

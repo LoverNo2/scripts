@@ -45,8 +45,9 @@ def flee():
     print("逃跑:点击逃跑按钮")
     click_pos(pos_flee_btn)
     print("逃跑:点击确认逃跑按钮")
-    click_pos(pos_flee_confirm_btn, sleep=0.5)
+    click_pos(pos_flee_confirm_btn)
     print("逃跑:点击逃跑成功按钮")
+    time.sleep(2)
     click_pos(pos_flee_success_btn)
     print("逃跑完成")
 
@@ -94,7 +95,7 @@ def settle_win():
     print("结算:点击经验获取确认")
     click_pos(pos_exp_confirm)
 
-    if detect(img_drop, timeout=2):
+    if detect(img_drop, timeout=1):
         print("结算:检测到掉落物,点击掉落确认")
         click_pos(pos_drop_confirm)
 

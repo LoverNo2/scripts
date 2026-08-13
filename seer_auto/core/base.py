@@ -87,7 +87,13 @@ def viewport_to_screen(x, y):
 
 
 def click_position(x, y, clicks=1, interval=0.0, button="left", duration=0.0):
-    pyautogui.click(x, y, clicks=clicks, interval=interval, button=button, duration=duration)
+    pyautogui.click(
+        x, y, clicks=clicks, interval=interval, button=button, duration=duration
+    )
+
+
+def click_left():
+    pyautogui.click()
 
 
 def double_click(x, y, interval=0.1, duration=0.0):
@@ -111,7 +117,6 @@ def drag(x1, y1, x2, y2, duration=0.3):
 
 
 def drag_rel(dx, dy, duration=0.3):
-    dx, dy = viewport_to_screen(dx, dy)
     pyautogui.dragRel(int(dx), int(dy), duration=duration)
 
 
@@ -160,7 +165,9 @@ def find_template(screen, template, threshold=0.85):
     return None, max_val
 
 
-def find_all_templates(screen, template, threshold=0.85, max_matches=5, min_distance=20):
+def find_all_templates(
+    screen, template, threshold=0.85, max_matches=5, min_distance=20
+):
     h, w = template.shape[:2]
     work = to_bgr(screen).copy()
     template = to_bgr(template)
@@ -176,4 +183,3 @@ def find_all_templates(screen, template, threshold=0.85, max_matches=5, min_dist
         x0, x1 = max(0, x - pad), min(work.shape[1], x + w + pad)
         work[y0:y1, x0:x1] = 0
     return matches
-

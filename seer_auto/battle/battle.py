@@ -7,6 +7,7 @@ from config.images import (
     img_battle_start,
     img_battle_win,
     img_drop,
+    img_tire,
 )
 
 from config.positions import (
@@ -21,9 +22,12 @@ from config.positions import (
     pos_skill_1,
     pos_drop_confirm,
     pos_exp_confirm,
-    pos_battle_end_confirm
+    pos_battle_end_confirm,
+    pos_tire_1,
 )
 from targets import TARGETS
+from battle.plane_nav import enter_planet
+from config.plane import GALAXIES
 
 
 # 检测图片是否出现

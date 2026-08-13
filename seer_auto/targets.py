@@ -11,5 +11,8 @@ TARGETS = {
     "jier": {
         "img_pet": "pets/jier.png",
         "img_pet_avatar": "avatars/avatar_jier.png",
+        "galaxy": "pano",
+        "planets": "volcano",
+        "layer": 2,
     },
 }

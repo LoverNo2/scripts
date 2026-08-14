@@ -3,7 +3,7 @@ import pyautogui
 
 from config.view import VIEW_SIZE, view_left, view_top, view_width
 
-pyautogui.FAILSAFE = True
+pyautogui.FAILSAFE = False  # 已关闭左上角紧急停止机制(按用户要求)
 pyautogui.PAUSE = 0.05
 
 

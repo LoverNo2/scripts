@@ -2,12 +2,16 @@
 
 import time
 
-from battle.battle import enter_battle
 from battle.ops import flee, heal_pets
 from battle.plane_nav import enter_planet
 from battle.relogin import relogin
 from core.actions import click_img, click_pos, detect, wait_img
-from config.images import img_capture_success, img_klose_layer_2, img_pet_2
+from config.images import (
+    img_battle_start,
+    img_capture_success,
+    img_klose_layer_2,
+    img_pet_2,
+)
 from config.positions import (
     pos_battle_pos,
     pos_capture_btn,
@@ -43,7 +47,13 @@ def _check_relogin(target):
     if time.time() - LOGIN_START < RELOGIN_INTERVAL:
         return
     print(f"本次登录已超过 {RELOGIN_INTERVAL // 60} 分钟,触发重新登录")
-    relogin()
+    _relogin_and_back(target)
+
+
+def _relogin_and_back(target):
+    """重新登录(刷新页面)并回到目标星球一层。"""
+    global LOGIN_START
+    relogin()  # relogin 内部自动刷新登录计时器
     LOGIN_START = time.time()  # 重置登录计时
     if "galaxy" in target and "planets" in target:
         print(f"重新登录完成,返回 {target['galaxy']}/{target['planets']} 一层")
@@ -51,10 +61,11 @@ def _check_relogin(target):
 
 
 def _refresh_until_target(target):
-    """一/二层来回切换刷新精灵,直到一层刷出目标精灵。
+    """一/二层来回切换,直接点击目标精灵直到正式进入战斗。
 
-    一层点击 POS_ENTER_LAYER2 进二层,持续检查二层标志图,
-    检测到确认进入二层后,点击 POS_BACK_LAYER1 立刻回一层。
+    一层点击 POS_ENTER_LAYER2 进二层,持续检查二层标志图后回一层,
+    直接点击目标精灵:点击成功且战斗标志出现才返回 True;
+    点击后 10 秒未进入战斗则刷新页面(重新登录)继续。
     """
     while True:
         click_pos(POS_ENTER_LAYER2, sleep=1)  # 一层 -> 二层
@@ -64,11 +75,17 @@ def _refresh_until_target(target):
         click_pos(POS_BACK_LAYER1, sleep=1)  # 检测到,立刻回到一层
         _check_relogin(target)  # 每次回到一层判断登录时长,超时重新登录
         time.sleep(REFRESH_WAIT)  # 等待三只精灵刷出
-        # 与 enter_battle 的 click_img 使用相同阈值(0.9),保证检测到即可点击
-        if wait_img(target["img_pet"], timeout=5, threshold=0.8):
-            print("检测到目标精灵,开始捕捉")
+        # 直接点击目标精灵,不再先检测图片
+        if not click_img(target["img_pet"], timeout=5):
+            print("未点击到目标精灵,继续来回切换")
+            continue
+        print("已点击目标精灵,检测战斗开始标志")
+        if detect(img_battle_start, timeout=10):
+            print("战斗开始标志已出现,正式进入战斗")
             return True
-        print("一层未出现目标精灵,继续来回切换")
+        # 点击成功但未进入战斗:刷新页面后继续
+        print("点击精灵后 10 秒未进入战斗,刷新页面")
+        _relogin_and_back(target)
 
 
 def _turn(pos_skill, sleep=1, round_wait=ROUND_WAIT):
@@ -105,13 +122,8 @@ def _settle_captured(target):
 
 
 def capture_once(target):
-    """单次捕捉:刷新出目标精灵后进入战斗(含防疲劳),换宠耗血循环捕捉。"""
-    if not _refresh_until_target(target):
-        return "no_pet"
-    result = enter_battle(target)
-    if result != "fighting":
-        print(f"进入战斗失败({result}),本次捕捉取消")
-        return result
+    """单次捕捉:切层刷新并确认进入战斗后,换宠耗血循环捕捉。"""
+    _refresh_until_target(target)  # 无限循环直到正式进入战斗
 
     time.sleep(2)
     _turn(pos_skill_2)  # 首发精灵使用二技能

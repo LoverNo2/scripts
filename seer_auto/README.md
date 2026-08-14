@@ -98,6 +98,6 @@ pip install -r requirements.txt
 
 ## 安全提示
 
-- 脚本默认开启 pyautogui 的 FailSafe：操作过程中把鼠标快速甩到屏幕左上角可紧急终止。
+- 脚本已关闭 pyautogui 的 FailSafe（`core/mouse.py` 中 `FAILSAFE = False`）：鼠标甩到左上角不会紧急终止。若需恢复紧急停止，改回 `True` 即可。
 - `click_img` 默认匹配阈值 0.9；若经常匹配不到，运行 `python debug_match.py` 查看每个模板的实际匹配分数，再决定调整模板或阈值。
 - 图标模板基于 1440 宽视口裁剪；窗口宽度变化时脚本自动在基准分辨率匹配，无需为不同分辨率重新裁剪。

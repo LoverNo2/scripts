@@ -4,18 +4,10 @@ import time
 
 from battle.battle import enter_battle
 from battle.ops import flee, heal_pets
+from battle.plane_nav import enter_planet
+from battle.relogin import relogin
 from core.actions import click_img, click_pos, detect, wait_img
 from config.images import img_capture_success, img_klose_layer_2, img_pet_2
-from config.positions import (
-    pos_battle_pos,
-    pos_capture_btn,
-    pos_capture_confirm,
-    pos_capture_item_2,
-    pos_skill_1,
-    pos_skill_2,
-    pos_skill_3,
-    pos_switch_btn,
-)
 from config.positions import (
     pos_battle_pos,
     pos_capture_btn,
@@ -39,6 +31,23 @@ LAYER2_DETECT_TIMEOUT = 5.0
 # 一层与二层之间的切换位置(视口坐标,待实测补充)
 POS_ENTER_LAYER2 = (24, 810)  # 在一层点击此处进入二层
 POS_BACK_LAYER1 = (1700, 553)  # 在二层点击此处回到一层
+# 登录超过该时长(秒)触发重新登录
+RELOGIN_INTERVAL = 30 * 60
+# 本次登录开始时间,以 capture() 入口为准
+LOGIN_START = time.time()
+
+
+# 每次回到一层时检查登录时长,超时则重新登录并回到目标星球一层
+def _check_relogin(target):
+    global LOGIN_START
+    if time.time() - LOGIN_START < RELOGIN_INTERVAL:
+        return
+    print(f"本次登录已超过 {RELOGIN_INTERVAL // 60} 分钟,触发重新登录")
+    relogin()
+    LOGIN_START = time.time()  # 重置登录计时
+    if "galaxy" in target and "planets" in target:
+        print(f"重新登录完成,返回 {target['galaxy']}/{target['planets']} 一层")
+        enter_planet(target["galaxy"], target["planets"], layer=1)
 
 
 def _refresh_until_target(target):
@@ -53,6 +62,7 @@ def _refresh_until_target(target):
         while wait_img(img_klose_layer_2, timeout=LAYER2_DETECT_TIMEOUT) is None:
             print("二层标志图未出现,持续检测中")
         click_pos(POS_BACK_LAYER1, sleep=1)  # 检测到,立刻回到一层
+        _check_relogin(target)  # 每次回到一层判断登录时长,超时重新登录
         time.sleep(REFRESH_WAIT)  # 等待三只精灵刷出
         # 与 enter_battle 的 click_img 使用相同阈值(0.9),保证检测到即可点击
         if wait_img(target["img_pet"], timeout=5, threshold=0.8):
@@ -124,6 +134,8 @@ def capture_once(target):
 
 def capture(name, times=10):
     """连续捕捉入口:每次成功捕捉后治疗一号位与二号位精灵。"""
+    global LOGIN_START
+    LOGIN_START = time.time()  # 以本轮捕捉开始作为登录起点
     target = TARGETS[name]
     # 无限次循环捕捉
     while True:

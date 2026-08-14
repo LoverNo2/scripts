@@ -15,6 +15,7 @@ seer_auto/
 │   └── actions.py        # 组合动作：供 main / battle 直接使用的完整操作
 ├── battle/               # 业务层（编排 + 平行子动作）
 │   ├── battle.py         # 战斗编排：进入 / 防疲劳 / 战斗循环 / 被传送回位
+│   ├── capture.py        # 精灵捕捉：换宠 / 耗血 / 捕捉循环
 │   ├── ops.py            # 子动作：逃跑 / 治疗 / 胜负结算
 │   └── plane_nav.py      # 子动作：星球导航
 ├── config/               # 配置层（全部命名映射与常量）

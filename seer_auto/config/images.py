@@ -5,3 +5,4 @@ img_battle_lose = "battle/battle_lose.png"
 img_drop = "battle/drop.png"
 img_tire = "battle/tire.png"
 img_tire_3 = "battle/tire_3.png"
+img_capture_success = "battle/capture_success.png"  # 捕捉成功标志(模拟:暂用 info.png 占位,待裁剪真实图标替换)

@@ -14,6 +14,8 @@ from config.positions import (
     pos_heal_btn,
     pos_heal_close_btn,
     pos_heal_confirm_btn,
+    pos_heal_pet_1,
+    pos_heal_pet_2,
 )
 
 
@@ -35,6 +37,17 @@ def heal():
     _click("治疗:点击精灵背包", pos_heal_bag)
     _click("治疗:点击治疗按钮", pos_heal_btn)
     _click("治疗:点击确认治疗按钮", pos_heal_confirm_btn)
+    _click("治疗:点击关闭治疗界面按钮", pos_heal_close_btn)
+
+
+# 治疗一号位与二号位精灵
+def heal_pets():
+    """打开治疗界面,依次治疗一号位与二号位精灵后关闭。"""
+    _click("治疗:点击精灵背包", pos_heal_bag)
+    for name, pos_pet in (("一号位", pos_heal_pet_1), ("二号位", pos_heal_pet_2)):
+        _click(f"治疗:选择{name}精灵", pos_pet)
+        _click("治疗:点击治疗按钮", pos_heal_btn)
+        _click("治疗:点击确认治疗按钮", pos_heal_confirm_btn)
     _click("治疗:点击关闭治疗界面按钮", pos_heal_close_btn)
 
 

@@ -22,7 +22,7 @@ from config.targets import TARGETS
 # 进入战斗
 def enter_battle(target):
     print(f"进入战斗:检测并点击精灵图像 {target['img_pet']}")
-    if not click_img(target["img_pet"]):
+    if not click_img(target["img_pet"], timeout=10, interval=0.2):
         print("未发现精灵图像,本次战斗取消")
         return "no_pet"
     print("已点击精灵图像")

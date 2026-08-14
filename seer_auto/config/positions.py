@@ -28,3 +28,4 @@ pos_battle_miss_confirm = (906, 662)
 pos_skill_1 = (900, 875)
 
 pos_tire_1 = (603, 517)
+pos_tire_3 = (901, 666)

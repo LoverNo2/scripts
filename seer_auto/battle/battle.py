@@ -8,6 +8,8 @@ from config.images import (
     img_battle_win,
     img_drop,
     img_tire,
+    img_tire_3,
+    info,
 )
 
 from config.positions import (
@@ -24,6 +26,7 @@ from config.positions import (
     pos_exp_confirm,
     pos_battle_end_confirm,
     pos_tire_1,
+    pos_tire_3,
 )
 from targets import TARGETS
 
@@ -104,7 +107,10 @@ def _skip_anti_fatigue(target):
     """跳过防疲劳弹窗:最多两次选择机会,两次都未进入战斗则视为被传送。"""
     # 第一次选择
     print("防疲劳:第一次选择,点击 pos_tire_1")
-    click_pos(pos_tire_1)
+    click_pos(pos_tire_1, sleep=1)
+    if detect(img_tire_3, timeout=2):
+        click_pos(pos_tire_3, sleep=1)
+        return "fled"
     if detect(img_battle_start, timeout=3):
         print("防疲劳:选择成功进入战斗,直接逃跑,进入下一次")
         flee()
@@ -114,6 +120,9 @@ def _skip_anti_fatigue(target):
     if detect(img_tire, timeout=1):
         print("防疲劳:第一次选择失败,第二次点击 pos_tire_1")
         click_pos(pos_tire_1)
+        if detect(img_tire_3, timeout=2):
+            click_pos(pos_tire_3, sleep=1)
+            return "fled"
         if detect(img_battle_start, timeout=3):
             print("防疲劳:第二次选择成功进入战斗,直接逃跑,进入下一次")
             flee()
@@ -137,9 +146,7 @@ def _teleport_back(target):
         f"被传送:调用 enter_planet 回到 "
         f"{target['galaxy']}/{target['planets']} (layer={target.get('layer', 1)})"
     )
-    ok = enter_planet(
-        target["galaxy"], target["planets"], layer=target.get("layer", 1)
-    )
+    ok = enter_planet(target["galaxy"], target["planets"], layer=target.get("layer", 1))
     if not ok:
         print("传送回原位置失败,取消本次战斗")
         return "no_pet"

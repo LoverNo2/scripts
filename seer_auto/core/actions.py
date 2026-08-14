@@ -8,6 +8,9 @@ from core.base import (
     to_screen_coords,
     viewport_to_screen,
 )
+from config.images import (
+    info,
+)
 
 
 def click_pos(x, y=None, sleep=1.0, clicks=1, button="left", duration=0.0):

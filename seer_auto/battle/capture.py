@@ -21,18 +21,18 @@ from config.positions import (
 from config.targets import TARGETS
 
 # 单回合等待时长(秒),按游戏实际回合节奏调整
-ROUND_WAIT = 7.0
+ROUND_WAIT = 8.0
 # 单次捕捉的最大尝试次数,超限后逃跑结束
 MAX_CAPTURE_ATTEMPTS = 30
 # 回到一层后等待精灵刷出的时长(秒)
-REFRESH_WAIT = 3.0
+REFRESH_WAIT = 2.0
 # 进入二层后,单次检测标志图的时长(秒),未出现则持续检测
-LAYER2_DETECT_TIMEOUT = 5.0
+LAYER2_DETECT_TIMEOUT = 3.0
 # 一层与二层之间的切换位置(视口坐标,待实测补充)
 POS_ENTER_LAYER2 = (24, 810)  # 在一层点击此处进入二层
 POS_BACK_LAYER1 = (1700, 553)  # 在二层点击此处回到一层
 # 登录超过该时长(秒)触发重新登录
-RELOGIN_INTERVAL = 30 * 60
+RELOGIN_INTERVAL = 10 * 60
 # 本次登录开始时间,以 capture() 入口为准
 LOGIN_START = time.time()
 
@@ -71,11 +71,11 @@ def _refresh_until_target(target):
         print("一层未出现目标精灵,继续来回切换")
 
 
-def _turn(pos_skill, sleep=1):
+def _turn(pos_skill, sleep=1, round_wait=ROUND_WAIT):
     """点击技能并等待本回合结束。"""
     time.sleep(sleep)
     click_pos(pos_skill)
-    time.sleep(ROUND_WAIT)
+    time.sleep(round_wait)
 
 
 def _switch_pet():
@@ -95,7 +95,7 @@ def _try_capture():
     """打开捕捉界面并用二号道具捕捉,返回是否成功。"""
     click_pos(pos_capture_btn)
     click_pos(pos_capture_item_2)
-    return detect(img_capture_success, timeout=3)
+    return detect(img_capture_success, timeout=5)
 
 
 def _settle_captured(target):
@@ -120,13 +120,13 @@ def capture_once(target):
     time.sleep(1)
     _turn(pos_skill_3)  # 第一回合:三技能
     _turn(pos_skill_3)  # 第二回合:三技能
-    _turn(pos_skill_1)  # 第三回合:一技能
+    _turn(pos_skill_1, round_wait=4)  # 第三回合:一技能
     for attempt in range(MAX_CAPTURE_ATTEMPTS):
         if _try_capture():
             _settle_captured(target)
             return "captured"
         print(f"捕捉未成功(第{attempt + 1}次),用三技能重新进入状态")
-        _turn(pos_skill_1)
+        _turn(pos_skill_1, round_wait=4)  # 第四回合:三技能
     print("捕捉尝试次数已达上限,逃跑结束本次捕捉")
     flee()
     return "failed"

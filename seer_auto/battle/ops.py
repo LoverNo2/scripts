@@ -1,8 +1,9 @@
 """战斗子动作:逃跑 / 治疗 / 胜负结算,与 plane_nav 平行,由 battle 编排调用。"""
+
 import time
 
-from core.actions import click_pos, detect
-from config.images import img_drop
+from core.actions import click_img, click_pos, detect
+from config.images import img_drop, img_heal_two
 from config.positions import (
     pos_battle_end_confirm,
     pos_drop_confirm,
@@ -15,7 +16,6 @@ from config.positions import (
     pos_heal_close_btn,
     pos_heal_confirm_btn,
     pos_heal_pet_1,
-    pos_heal_pet_2,
 )
 
 
@@ -44,8 +44,15 @@ def heal():
 def heal_pets():
     """打开治疗界面,依次治疗一号位与二号位精灵后关闭。"""
     _click("治疗:点击精灵背包", pos_heal_bag)
-    for name, pos_pet in (("一号位", pos_heal_pet_1), ("二号位", pos_heal_pet_2)):
-        _click(f"治疗:选择{name}精灵", pos_pet)
+    # 一号位:固定位置定位
+    _click("治疗:选择一号位精灵", pos_heal_pet_1)
+    _click("治疗:点击治疗按钮", pos_heal_btn)
+    _click("治疗:点击确认治疗按钮", pos_heal_confirm_btn)
+    # 二号位:检测 heal_two.png 定位
+    if not click_img(img_heal_two):
+        print("未检测到二号位精灵图片(heal_two.png),跳过二号位治疗")
+    else:
+        time.sleep(1)
         _click("治疗:点击治疗按钮", pos_heal_btn)
         _click("治疗:点击确认治疗按钮", pos_heal_confirm_btn)
     _click("治疗:点击关闭治疗界面按钮", pos_heal_close_btn)

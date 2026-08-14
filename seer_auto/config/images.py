@@ -7,3 +7,5 @@ img_tire = "battle/tire.png"
 img_tire_3 = "battle/tire_3.png"
 img_capture_success = "battle/capture_success.png"  # 捕捉成功标志(模拟:暂用 info.png 占位,待裁剪真实图标替换)
 img_pet_2 = "battle/two.png"  # 二号精灵图标(切换精灵用)
+img_heal_two = "battle/heal_two.png"  # 治疗界面二号位精灵图标
+img_klose_layer_2 = "battle/klose_layer_2.png"  # klose 二层标志图

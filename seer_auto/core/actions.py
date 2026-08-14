@@ -1,4 +1,5 @@
 """组合动作:面向业务流程的高层操作。"""
+
 import time
 
 from core.mouse import click_position, viewport_to_screen
@@ -30,7 +31,7 @@ def wait_img(template, timeout=10.0, interval=0.5, threshold=0.85):
             time.sleep(interval)
 
 
-def click_img(template, timeout=10.0, interval=0.5, threshold=0.9):
+def click_img(template, timeout=10.0, interval=0.1, threshold=0.9):
     """检测图标并点击一次,返回 (屏幕坐标, 分数);超时返回 None。"""
     found = wait_img(template, timeout, interval, threshold)
     if found is None:

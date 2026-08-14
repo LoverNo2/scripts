@@ -21,7 +21,6 @@ pos_heal_btn = (838, 800)
 pos_heal_confirm_btn = (900, 662)
 pos_heal_close_btn = (838, 262)
 pos_heal_pet_1 = (502, 419)  # 治疗界面一号位精灵(模拟)
-pos_heal_pet_2 = (754, 705)  # 治疗界面二号位精灵(模拟)
 
 # 精灵消失确认
 pos_battle_miss_confirm = (906, 662)

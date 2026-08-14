@@ -10,7 +10,7 @@ GALAXIES = {
         "planets": {
             "klose": {
                 "drag": (0, 0),
-                "pos_enter": (344, 415),
+                "pos_enter": (574, 393),
                 "pos_layer2": (37, 743),
             },
             "volcano": {

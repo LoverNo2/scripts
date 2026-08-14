@@ -37,7 +37,6 @@ pos_tire_3 = (901, 666)
 pos_skill_2 = (1128, 875)  # 二技能
 pos_skill_3 = (900, 990)  # 三技能
 pos_switch_btn = (1378, 976)  # 切换精灵按钮
-pos_pet_2 = (929, 819)  # 二号精灵位置
 pos_battle_pos = (630, 1020)  # 出战确认位置
 pos_capture_btn = (1375, 830)  # 捕捉按钮
 pos_capture_item_2 = (757, 888)  # 二号捕捉道具

@@ -4,14 +4,13 @@ import time
 
 from battle.battle import enter_battle
 from battle.ops import flee, heal_pets
-from core.actions import click_pos, detect
-from config.images import img_capture_success
+from core.actions import click_img, click_pos, detect
+from config.images import img_capture_success, img_pet_2
 from config.positions import (
     pos_battle_pos,
     pos_capture_btn,
     pos_capture_confirm,
     pos_capture_item_2,
-    pos_pet_2,
     pos_skill_1,
     pos_skill_2,
     pos_skill_3,
@@ -33,11 +32,14 @@ def _turn(pos_skill, sleep=1):
 
 
 def _switch_pet():
-    """切换二号精灵出战:切换 -> 选二号 -> 确认出战。"""
+    """切换二号精灵出战:切换 -> 识别并点击二号精灵 -> 确认出战。"""
     click_pos(pos_switch_btn)
-    click_pos(pos_pet_2)
+    if not click_img(img_pet_2):
+        print("未识别到二号精灵图片(two.png),放弃本次切换")
+        return False
     click_pos(pos_battle_pos)
     time.sleep(3)
+    return True
 
 
 def _try_capture():
@@ -62,7 +64,8 @@ def capture_once(target):
 
     time.sleep(1)
     _turn(pos_skill_2)  # 首发精灵使用二技能
-    _switch_pet()  # 换二号精灵出战
+    if not _switch_pet():  # 换二号精灵出战
+        return "failed"
     _turn(pos_skill_3)  # 第一回合:三技能
     _turn(pos_skill_3)  # 第二回合:三技能
     _turn(pos_skill_1)  # 第三回合:一技能
@@ -71,7 +74,7 @@ def capture_once(target):
             _settle_captured(target)
             return "captured"
         print(f"捕捉未成功(第{attempt + 1}次),用三技能重新进入状态")
-        _turn(pos_skill_3)
+        _turn(pos_skill_1)
     print("捕捉尝试次数已达上限,逃跑结束本次捕捉")
     flee()
     return "failed"

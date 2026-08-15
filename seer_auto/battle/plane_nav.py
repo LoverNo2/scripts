@@ -1,4 +1,3 @@
-"""星球导航子动作:从星图进入指定星系/星球(可下第二层)。"""
 
 import time
 
@@ -15,7 +14,7 @@ def enter_planet(galaxy_name, planet_name, layer=1):
     click_pos(galaxy["pos"])
     click_pos(planet["pos_enter"], sleep=5)
     click_left()
-    time.sleep(3)
+
     if planet["drag"] != (0, 0):
         move_to(pos_map_center)
         time.sleep(2)
@@ -24,6 +23,5 @@ def enter_planet(galaxy_name, planet_name, layer=1):
     if layer >= 2:
         click_pos(planet["pos_layer2"])
         if not detect(planet["layer2_img"], timeout=10.0, interval=0.5):
-            print("未检测到第二层图片")
             return False
     return True

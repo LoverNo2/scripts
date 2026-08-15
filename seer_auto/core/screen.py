@@ -1,4 +1,3 @@
-"""屏幕捕获与图像处理原语。"""
 import cv2
 import numpy as np
 import pyautogui
@@ -14,7 +13,6 @@ MAIN_MONITOR = 1
 
 
 def to_bgr(frame):
-    """统一转为 BGR 三通道 uint8 图像。"""
     if frame.ndim == 2:
         frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
     elif frame.shape[2] == 4:
@@ -27,7 +25,6 @@ def to_bgr(frame):
 
 
 def grab_screen(region=None):
-    """抓取屏幕(或指定区域),返回 BGR 图像。"""
     if HAS_MSS:
         with mss() as sct:
             if region is None:
@@ -54,10 +51,5 @@ def grab_screen(region=None):
 
 
 def to_screen_coords(screen, x, y):
-    """把截图内的图像坐标换算为屏幕逻辑坐标。
-
-    macOS 高分屏截图是物理像素(如 2880x1800),而 pyautogui 点击用
-    逻辑坐标(1440x900),不换算会点击到错误位置(约差 2 倍)。
-    """
     sw, sh = pyautogui.size()
     return int(x * sw / screen.shape[1]), int(y * sh / screen.shape[0])

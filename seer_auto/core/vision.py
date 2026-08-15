@@ -1,4 +1,3 @@
-"""图标模板匹配原语。"""
 from pathlib import Path
 
 import cv2
@@ -12,12 +11,6 @@ DEFAULT_THRESHOLD = 0.85
 
 
 def load_template(template_path):
-    """读取图标模板,并按当前视口缩放比例等比缩放后返回。
-
-    约定:assets/ 下的模板基于 VIEW_SIZE(1440 宽)视口裁剪;
-    视口宽度调整后,图标实际尺寸变为 原尺寸 * view_width / 1440,
-    这里自动缩放,保证旧模板在新视口下仍能匹配。
-    """
     path = Path(template_path)
     if not path.is_absolute():
         path = TEMPLATES_DIR / path
@@ -32,7 +25,6 @@ def load_template(template_path):
 
 
 def find_template(screen, template, threshold=DEFAULT_THRESHOLD):
-    """单次模板匹配,返回 (中心坐标, 分数);未命中返回 (None, 分数)。"""
     screen = to_bgr(screen)
     template = to_bgr(template)
     result = cv2.matchTemplate(screen, template, cv2.TM_CCOEFF_NORMED)
@@ -48,7 +40,6 @@ def find_template(screen, template, threshold=DEFAULT_THRESHOLD):
 def find_all_templates(
     screen, template, threshold=DEFAULT_THRESHOLD, max_matches=5, min_distance=20
 ):
-    """查找屏幕上所有匹配的模板,返回 [(中心坐标, 分数), ...]。"""
     h, w = template.shape[:2]
     work = to_bgr(screen).copy()
     template = to_bgr(template)

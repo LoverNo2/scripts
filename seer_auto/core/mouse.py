@@ -1,18 +1,12 @@
-"""鼠标操作与视口坐标换算原语。"""
 import pyautogui
 
 from config.view import VIEW_SIZE, view_left, view_top, view_width
 
-pyautogui.FAILSAFE = False  # 已关闭左上角紧急停止机制(按用户要求)
+pyautogui.FAILSAFE = False
 pyautogui.PAUSE = 0.05
 
 
 def viewport_to_screen(x, y):
-    """把相对游戏视口左上角的配置坐标换算为屏幕坐标。
-
-    视口固有比例 VIEW_SIZE(1440x840),运行时按 view_width 等比缩放:
-    scale = view_width / 1440, 屏幕坐标 = 视口左上角 + 配置坐标 * scale。
-    """
     scale = view_width / VIEW_SIZE[0]
     return int(view_left + x * scale), int(view_top + y * scale)
 
@@ -28,7 +22,6 @@ def click_left():
 
 
 def move_to(x, y=None, duration=0.1):
-    """移动到视口内配置坐标(支持元组或 x,y 传参)。"""
     if y is None:
         x, y = x
     x, y = viewport_to_screen(x, y)

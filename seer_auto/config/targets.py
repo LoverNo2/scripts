@@ -1,4 +1,3 @@
-
 TARGETS = {
     "nail": {
         "img_pet": "pets/nail.png",
@@ -32,7 +31,7 @@ TARGETS = {
         "galaxy": "pano",
         "planets": "klose",
         "layer": 1,
-        "safe_pos": (1638, 372),
+        "safe_pos": (163, 900),
     },
     "eye": {
         "img_pet": "pets/eye.png",
@@ -40,6 +39,6 @@ TARGETS = {
         "galaxy": "kalan",
         "planets": "taco",
         "layer": 1,
-        "safe_pos": (900, 870),
+        "safe_pos": (28, 917),
     },
 }

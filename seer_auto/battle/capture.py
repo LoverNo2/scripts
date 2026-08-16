@@ -1,4 +1,3 @@
-
 import time
 
 from battle.ops import flee, heal_pets
@@ -27,9 +26,9 @@ ROUND_WAIT = 8.0
 
 MAX_CAPTURE_ATTEMPTS = 15
 
-REFRESH_DETECT_TIMEOUT = 5.0
+TARGET_DETECT_TIMEOUT = 30
 
-RELOGIN_INTERVAL = 30
+RELOGIN_INTERVAL = 30 * 60
 
 LOGIN_START = time.time()
 
@@ -37,7 +36,10 @@ LOGIN_START = time.time()
 def _check_relogin(target):
     global LOGIN_START
     if time.time() - LOGIN_START >= RELOGIN_INTERVAL:
+        print(f"本次登录已超过 {RELOGIN_INTERVAL // 60} 分钟,触发重新登录")
         _relogin_and_back(target)
+        return True
+    return False
 
 
 def _relogin_and_back(target):
@@ -45,21 +47,23 @@ def _relogin_and_back(target):
     relogin()
     LOGIN_START = time.time()
     enter_planet(target["galaxy"], target["planets"], layer=1)
+    time.sleep(3)
+    click_pos(target["safe_pos"])
 
 
 def _refresh_until_target(target):
+    detect_start = time.time()
     while True:
-        _check_relogin(target)
-        if (
-            wait_img(target["img_pet"], timeout=REFRESH_DETECT_TIMEOUT, threshold=0.9)
-            is None
-        ):
+        if not click_img(target["img_pet"], timeout=TARGET_DETECT_TIMEOUT):
+            print(f"检测目标精灵中,已检测{int(time.time() - detect_start)}秒")
+            if _check_relogin(target):
+                detect_start = time.time()
             continue
-        if not click_img(target["img_pet"]):
-            continue
+        print("检测到目标精灵,点击进入战斗")
         if detect(img_battle_start, timeout=10):
+            print("战斗开始标志已出现,正式进入战斗")
             return True
-
+        print("点击精灵后长时间未进入战斗,刷新页面")
         _relogin_and_back(target)
         return None
 
@@ -123,4 +127,6 @@ def capture(name):
         result = capture_once(target)
         if result is None:
             continue
+        click_pos(target["safe_pos"])
+        time.sleep(1)
         heal_pets()

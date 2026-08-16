@@ -7,7 +7,4 @@ from battle.relogin import relogin
 
 if __name__ == "__main__":
     time.sleep(3)
-
-
     capture("eye")
-

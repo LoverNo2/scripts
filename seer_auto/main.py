@@ -6,5 +6,5 @@ from battle.plane_nav import enter_planet
 from battle.relogin import relogin
 
 if __name__ == "__main__":
-    time.sleep(3)
+    time.sleep(2)
     capture("eye")

@@ -39,6 +39,6 @@ TARGETS = {
         "galaxy": "kalan",
         "planets": "taco",
         "layer": 1,
-        "safe_pos": (28, 917),
+        "safe_pos": (35, 900),
     },
 }

@@ -1,4 +1,3 @@
-
 import time
 
 from core.actions import click_img, click_pos
@@ -27,7 +26,8 @@ SECOND_FORM = (806, 629)
 
 def relogin():
     click_pos(CLOSE_BTN, sleep=1)
-    click_pos(START_BTN, sleep=6)
+    click_pos(START_BTN, sleep=7)
+    click_pos(GAME_SCREEN, sleep=2)
     click_pos(GAME_SCREEN, sleep=2)
     click_pos(HOME_BTN, sleep=1)
     click_pos(LOGIN_BTN, sleep=4)

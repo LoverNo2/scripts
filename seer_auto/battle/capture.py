@@ -203,5 +203,6 @@ def capture(name):
             continue
         if result is None:
             continue
+        time.sleep(1)
         click_pos(target["safe_pos"])
         heal_pets()

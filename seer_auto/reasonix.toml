@@ -1,2 +1,0 @@
-[permissions]
-allow = ["Bash=python --version && where python", "Bash=python main.py 2>&1 | head -30"]

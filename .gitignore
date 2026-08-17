@@ -1,0 +1,7 @@
+# IDE 生成的会话元数据
+.reasonix/
+reasonix.toml
+
+__pycache__/
+*.pyc
+.DS_Store

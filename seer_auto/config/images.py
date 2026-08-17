@@ -13,3 +13,10 @@ img_reload = "battle/reload.png"
 img_klose_layer_2 = "battle/klose_layer_2.png"
 img_my_turn = "battle/my_turn.png"
 img_not_my_turn = "battle/not_my_turn.png"
+
+# ===== 训练室（素材暂缺,占位登记;截图后按同名保存到 assets/battle/ 即可启用） =====
+img_train_room = "battle/train_room.png"
+img_trainer = "battle/trainer.png"
+img_train_type_1 = "battle/train_type_1.png"
+img_train_arena = "battle/train_arena.png"
+img_train_enter_battle = "battle/train_enter_battle.png"  # 进入战斗的标志图标(点击擂台后监测)

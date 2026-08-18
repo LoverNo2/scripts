@@ -19,6 +19,8 @@ pos_heal_btn = (838, 800)
 pos_heal_confirm_btn = (900, 662)
 pos_heal_close_btn = (838, 262)
 pos_heal_pet_1 = (502, 419)
+pos_bag_open = (640, 626)  # 打开精灵背包入口(持续点击直到背包界面出现)
+pos_heal_confirm = (912, 656)  # 治疗确认
 
 
 pos_battle_miss_confirm = (906, 662)

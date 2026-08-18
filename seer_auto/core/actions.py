@@ -1,4 +1,3 @@
-
 import time
 
 from core.mouse import click_position, viewport_to_screen
@@ -37,7 +36,7 @@ def click_img(template, timeout=10.0, interval=0.1, threshold=0.9):
     return (x, y), score
 
 
-def detect(template, timeout=10.0, interval=0.5, threshold=0.85):
+def detect(template, timeout=10.0, interval=0.1, threshold=0.85):
     found = wait_img(template, timeout, interval, threshold)
     return found is not None
 

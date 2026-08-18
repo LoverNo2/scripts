@@ -1,8 +1,13 @@
-
 import time
 
 from core.actions import click_img, click_pos, detect
-from config.images import img_drop, img_heal_two
+from config.images import (
+    img_close_pet_bag,
+    img_drop,
+    img_heal,
+    img_heal_two,
+    img_pet_bag,
+)
 from config.positions import (
     pos_battle_end_confirm,
     pos_drop_confirm,
@@ -10,9 +15,11 @@ from config.positions import (
     pos_flee_btn,
     pos_flee_confirm_btn,
     pos_flee_success_btn,
+    pos_bag_open,
     pos_heal_bag,
     pos_heal_btn,
     pos_heal_close_btn,
+    pos_heal_confirm,
     pos_heal_confirm_btn,
     pos_heal_pet_1,
 )
@@ -48,6 +55,16 @@ def heal_pets():
         _click("治疗:点击治疗按钮", pos_heal_btn)
         _click("治疗:点击确认治疗按钮", pos_heal_confirm_btn)
     _click("治疗:点击关闭治疗界面按钮", pos_heal_close_btn)
+
+
+def heal_pets_train():
+    """训练室专用恢复:持续点击打开背包直到界面出现,治疗并关闭"""
+    while not detect(img_pet_bag, timeout=0.5):
+        click_pos(pos_bag_open)
+    click_img(img_heal)
+    time.sleep(1)
+    click_pos(pos_heal_confirm)
+    click_img(img_close_pet_bag)
 
 
 def settle_win():

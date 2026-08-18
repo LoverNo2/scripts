@@ -9,4 +9,4 @@ from battle.train import train
 if __name__ == "__main__":
     time.sleep(2)
     # capture("eye")
-    train(times=1)
+    train(times=148, train_type=2, refresh_every=100, heal_every=7)

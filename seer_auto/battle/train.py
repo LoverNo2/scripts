@@ -14,7 +14,7 @@ train() 流程:
 import time
 
 from battle.capture import wait_for_turn
-from battle.ops import heal_pets
+from battle.ops import heal_pets_train
 from battle.relogin import relogin
 from config.images import (
     img_train_arena,
@@ -61,7 +61,7 @@ TRAIN_TYPES = {
 
 
 # 点击战斗擂台后, 持续监测进入战斗图标的时间上限(秒)
-ENTER_BATTLE_TIMEOUT = 10.0
+ENTER_BATTLE_TIMEOUT = 3
 # 等待自己回合的超时(秒), 超时后继续等待
 TURN_WAIT_TIMEOUT = 20.0
 
@@ -80,6 +80,7 @@ def refresh(train_type=1):
     click_img(img_train_room_enter, timeout=2)
     click_img(img_trainer)
     click_img(TRAIN_TYPES[train_type])
+    time.sleep(5)
 
 
 def _enter_train_room(train_type=1):
@@ -125,38 +126,42 @@ def _fight():
 
 
 def _settle():
-    if detect(img_train_win_confirm, timeout=1):
+    if detect(img_train_win_confirm, timeout=0.5):
         print("胜利确认")
-        click_pos(pos_train_win_confirm, sleep=1)
-    if detect(img_train_upgrade_confirm, timeout=1):
+        click_pos(pos_train_win_confirm)
+    if detect(img_train_upgrade_confirm, timeout=0.5):
         print("升级确认")
-        click_pos(pos_train_upgrade_confirm, sleep=1)
-    if detect(img_train_exp_confirm, timeout=1):
+        click_pos(pos_train_upgrade_confirm)
+    if detect(img_train_exp_confirm, timeout=0.5):
         print("经验确认")
-        click_pos(pos_train_exp_confirm, sleep=1)
-    if detect(img_train_cancel_skill, timeout=1):
+        click_pos(pos_train_exp_confirm)
+    if detect(img_train_cancel_skill, timeout=0.5):
         print("技能替换确认")
-        click_pos(pos_train_cancel_skill, sleep=1)
-    if detect(img_store_exp_confirm, timeout=1):
+        click_pos(pos_train_cancel_skill)
+    if detect(img_store_exp_confirm, timeout=0.5):
         print("累计经验确认")
-        click_pos(pos_store_exp_confirm, sleep=1)
+        click_pos(pos_store_exp_confirm)
     print("战斗结算完成")
 
 
 # ---------- 主入口 ----------
 
 
-def train(times=10, train_type=6):
+def train(times=10, train_type=6, refresh_every=0, heal_every=1):
     if train_type not in TRAIN_TYPES:
         raise ValueError(f"不支持的训练类型: {train_type}, 可选 {sorted(TRAIN_TYPES)}")
     for i in range(times):
         print(f"第 {i + 1}/{times} 轮")
+        if refresh_every and i > 0 and i % refresh_every == 0:
+            print(f"已进行 {i} 轮,刷新页面重新执行")
+            refresh(train_type)
         _enter_train_room(train_type)
         if not _enter_train():
             print("未检测到进入战斗按钮, 刷新页面")
-            _enter_train_room(train_type)
+            refresh(train_type)
             continue
         _fight()
         _settle()
-        # heal_pets()
-        # time.sleep(1)
+        if heal_every and i % heal_every == 0:
+            heal_pets_train()
+        time.sleep(1)

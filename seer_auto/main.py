@@ -8,5 +8,5 @@ from battle.train import train
 
 if __name__ == "__main__":
     time.sleep(2)
-    capture("eye")
-    # train(times=1)
+    # capture("eye")
+    train(times=1)

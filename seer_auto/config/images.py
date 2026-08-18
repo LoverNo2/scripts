@@ -14,6 +14,10 @@ img_my_turn = "battle/my_turn.png"
 img_not_my_turn = "battle/not_my_turn.png"
 
 # ===== 训练室（素材暂缺,占位登记;截图后按同名保存到 assets/battle/ 即可启用） =====
+img_login_page = "login/login_page.png"
+img_login_btn = "login/login_btn.png"
+img_server_btn = "login/server_btn.png"
+img_save = "login/save.png"
 img_train_room = "train/train_room.png"
 img_train_room_enter = "train/train_room_enter.png"
 img_trainer = "train/trainer.png"

@@ -20,14 +20,20 @@ from config.images import (
     img_train_arena,
     img_train_cancel_skill,
     img_train_enter_battle,
+    img_train_exp_confirm,
     img_train_room,
     img_train_room_enter,
     img_train_type_1,
+    img_train_type_2,
+    img_train_type_3,
+    img_train_type_4,
+    img_train_type_5,
+    img_train_type_6,
     img_train_upgrade_confirm,
     img_train_win,
     img_train_win_confirm,
-    img_train_exp_confirm,
     img_trainer,
+    img_store_exp_confirm,
 )
 from config.positions import (
     pos_drop_confirm,
@@ -41,6 +47,17 @@ from config.positions import (
     pos_store_exp_confirm,
 )
 from core.actions import click_img, click_pos, detect
+
+
+# 训练类型 1-6 对应的选择图标
+TRAIN_TYPES = {
+    1: img_train_type_1,
+    2: img_train_type_2,
+    3: img_train_type_3,
+    4: img_train_type_4,
+    5: img_train_type_5,
+    6: img_train_type_6,
+}
 
 
 # 点击战斗擂台后, 持续监测进入战斗图标的时间上限(秒)
@@ -57,19 +74,19 @@ def _is_in_train_room():
 # ---------- 1. 登录/导航 + 点击训练师并选择训练类型 ----------
 
 
-def refresh():
+def refresh(train_type=1):
     relogin()
     click_pos(pos_star_map, sleep=1.5)
     click_img(img_train_room_enter, timeout=2)
     click_img(img_trainer)
-    click_img(img_train_type_1)
+    click_img(TRAIN_TYPES[train_type])
 
 
-def _enter_train_room():
+def _enter_train_room(train_type=1):
     if _is_in_train_room():
         print("已在训练室, 直接开始")
     else:
-        refresh()
+        refresh(train_type)
 
 
 # ---------- 2. 点击战斗擂台, 持续监测进入战斗图标 ----------
@@ -108,15 +125,20 @@ def _fight():
 
 
 def _settle():
-    if detect(img_train_win_confirm, timeout=2):
+    if detect(img_train_win_confirm, timeout=1):
+        print("胜利确认")
         click_pos(pos_train_win_confirm, sleep=1)
-    if detect(img_train_upgrade_confirm, timeout=2):
+    if detect(img_train_upgrade_confirm, timeout=1):
+        print("升级确认")
         click_pos(pos_train_upgrade_confirm, sleep=1)
-    if detect(img_train_exp_confirm, timeout=2):
+    if detect(img_train_exp_confirm, timeout=1):
+        print("经验确认")
         click_pos(pos_train_exp_confirm, sleep=1)
-    if detect(img_train_cancel_skill, timeout=2):
+    if detect(img_train_cancel_skill, timeout=1):
+        print("技能替换确认")
         click_pos(pos_train_cancel_skill, sleep=1)
-    if detect(img_store_exp_confirm, timeout=2):
+    if detect(img_store_exp_confirm, timeout=1):
+        print("累计经验确认")
         click_pos(pos_store_exp_confirm, sleep=1)
     print("战斗结算完成")
 
@@ -124,13 +146,15 @@ def _settle():
 # ---------- 主入口 ----------
 
 
-def train(times=10):
+def train(times=10, train_type=6):
+    if train_type not in TRAIN_TYPES:
+        raise ValueError(f"不支持的训练类型: {train_type}, 可选 {sorted(TRAIN_TYPES)}")
     for i in range(times):
         print(f"第 {i + 1}/{times} 轮")
-        _enter_train_room()
+        _enter_train_room(train_type)
         if not _enter_train():
             print("未检测到进入战斗按钮, 刷新页面")
-            _enter_train_room()
+            _enter_train_room(train_type)
             continue
         _fight()
         _settle()

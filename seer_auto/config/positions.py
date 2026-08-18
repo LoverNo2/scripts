@@ -1,4 +1,3 @@
-
 pos_flee_btn = (1688, 988)
 
 pos_flee_confirm_btn = (775, 662)
@@ -41,10 +40,12 @@ pos_capture_confirm = (900, 662)
 
 
 # ===== 训练室（素材暂缺,以下为模拟坐标,待截图校准后替换） =====
-pos_star_map = (93, 969)          # 星图按钮（与 relogin.STAR_MAP_BTN 一致）
-pos_train_room = (900, 500)       # 模拟: 星图中的训练室入口
-pos_trainer = (900, 600)          # 模拟: 训练室中的训练师
-pos_train_type_1 = (900, 700)     # 模拟: 训练类型选择-第一种
-pos_train_arena = (900, 800)      # 模拟: 战斗擂台(点击进入战斗)
+pos_star_map = (93, 969)  # 星图按钮（与 relogin.STAR_MAP_BTN 一致）
+pos_train_arena = (904, 264)  # 战斗擂台(点击进入战斗)
+pos_train_win_confirm = (902, 682)  # 胜利确认
+pos_train_upgrade_confirm = (916, 780)  # 升级确认
+pos_train_exp_confirm = (911, 773)  # 经验确认
+pos_train_cancel_skill = (916, 780)  # 取消技能替换
+pos_store_exp_confirm = (895, 667)  # 存储经验确认
 pos_upgrade_confirm = (900, 662)  # 模拟: 升级确认按钮
-pos_skill_keep_btn = (900, 662)   # 模拟: 技能替换-不替换按钮
+pos_skill_keep_btn = (900, 662)  # 模拟: 技能替换-不替换按钮

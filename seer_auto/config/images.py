@@ -1,4 +1,3 @@
-
 img_battle_start = "battle/battle_start.png"
 img_battle_win = "battle/battle_win.png"
 img_battle_lose = "battle/battle_lose.png"
@@ -15,8 +14,15 @@ img_my_turn = "battle/my_turn.png"
 img_not_my_turn = "battle/not_my_turn.png"
 
 # ===== 训练室（素材暂缺,占位登记;截图后按同名保存到 assets/battle/ 即可启用） =====
-img_train_room = "battle/train_room.png"
-img_trainer = "battle/trainer.png"
-img_train_type_1 = "battle/train_type_1.png"
-img_train_arena = "battle/train_arena.png"
-img_train_enter_battle = "battle/train_enter_battle.png"  # 进入战斗的标志图标(点击擂台后监测)
+img_train_room = "train/train_room.png"
+img_train_room_enter = "train/train_room_enter.png"
+img_trainer = "train/trainer.png"
+img_train_type_1 = "train/train_type_1.png"
+img_train_arena = "train/train_arena.png"
+img_train_enter_battle = "train/train_enter_battle.png"
+img_train_win = "train/win.png"
+img_train_cancel_skill = "train/cancel_skill.png"
+img_train_win_confirm = "train/win_confirm.png"
+img_train_exp_confirm = "train/exp_confirm.png"
+img_train_upgrade_confirm = "train/upgrade_comfirm.png"
+img_store_exp_confirm = "train/store_exp_confirm.png"

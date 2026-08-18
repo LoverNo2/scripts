@@ -9,4 +9,4 @@ from battle.train import train
 if __name__ == "__main__":
     time.sleep(2)
     capture("eye")
-    # train(times=10)  # 训练室挂机训练
+    # train(times=1)

@@ -62,8 +62,8 @@ TRAIN_TYPES = {
 
 # 点击战斗擂台后, 持续监测进入战斗图标的时间上限(秒)
 ENTER_BATTLE_TIMEOUT = 3
-# 等待自己回合的超时(秒), 超时后继续等待
-TURN_WAIT_TIMEOUT = 20.0
+# 等回合的探测窗口(秒), 与胜利检测交替轮询, 避免错过任意时刻的胜利
+TURN_PROBE_TIMEOUT = 2.0
 
 
 def _is_in_train_room():
@@ -111,14 +111,14 @@ def _check_battle_end(timeout=5):
 
 
 def _fight():
-    """自己的回合使用技能3, 每次使用后检测 2 秒胜利图标, 直到战斗结束"""
+    """胜利检测与等回合交替轮询: 胜利可能出现在任意时刻(如对方先手后的后手击杀),
+    不能只在我方出招后检测一次, 否则胜利界面无回合按钮会永远等不到我的回合"""
     while True:
-        if wait_for_turn(timeout=TURN_WAIT_TIMEOUT, expect="my_turn") != "my_turn":
-            continue
-        click_pos(pos_skill_3)
-        if _check_battle_end():
+        if _check_battle_end(timeout=1):
             print("战斗结束")
             return
+        if wait_for_turn(timeout=TURN_PROBE_TIMEOUT, expect="my_turn") == "my_turn":
+            click_pos(pos_skill_3)
 
 
 # ---------- 4. 战斗结算 ----------

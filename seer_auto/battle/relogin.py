@@ -13,7 +13,7 @@ from config.images import (
 
 CLOSE_BTN = (1766, -12)
 START_BTN = (1083, 728)
-GAME_SCREEN = (200, 200)
+GAME_SCREEN = (1694, 741)
 HOME_BTN = (900, 960)
 LOGIN_BTN = (842, 572)
 SERVER_BTN = (591, 363)
@@ -32,13 +32,19 @@ SECOND_FORM = (806, 629)
 
 
 def relogin():
+    print("[relogin] 开始重登")
     click_pos(CLOSE_BTN, sleep=1)
+    print("[relogin] 关闭窗口")
     click_pos(START_BTN, sleep=7)
+    print("[relogin] 启动游戏")
     click_pos(GAME_SCREEN, sleep=2)
     click_pos(GAME_SCREEN, sleep=2)
+    print("[relogin] 点击游戏画面")
     if detect(img_login_page, timeout=5):
         click_pos(HOME_BTN, sleep=1)
+        print("[relogin] 检测到登录页，点击主页")
     if detect(img_login_btn, timeout=5):
+        print("[relogin] 检测到登录按钮")
         while True:
             click_pos(LOGIN_BTN)
             if not detect(img_save, timeout=1):
@@ -46,19 +52,24 @@ def relogin():
             click_pos(SAVE_CONFIRM_BTN, sleep=1)
             if not detect(img_login_btn, timeout=5):
                 break
+        print("[relogin] 登录流程完成")
     if detect(img_server_btn, timeout=5):
         click_pos(SERVER_BTN, sleep=0)
+        print("[relogin] 选择服务器")
 
     click_img(img_reload, timeout=3)
     click_pos(NOPLAYER_BTN, sleep=0)
+    print("[relogin] 进入游戏")
     click_img(img_reload, timeout=1)
     click_pos(NONO_BTN, sleep=0)
     click_pos(NONO_BTN, sleep=0)
     click_img(img_reload, timeout=2)
     click_pos(NONO_2_BTN, sleep=0)
+    print("[relogin] 跳过对话框")
 
     click_img(img_reload, timeout=2)
     recall_nono()
+    print("[relogin] 重登完成")
 
 
 def recall_nono():

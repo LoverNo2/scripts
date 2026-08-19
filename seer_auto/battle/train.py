@@ -107,7 +107,6 @@ def _enter_train():
 
 
 def _check_battle_end(timeout=5):
-    """2 秒内检测到胜利图标即战斗结束"""
     return detect(img_train_win, timeout=timeout)
 
 
@@ -165,3 +164,22 @@ def train(times=10, train_type=6, refresh_every=0, heal_every=1):
         if heal_every and i % heal_every == 0:
             heal_pets_train()
         time.sleep(1)
+
+
+def train_plan(plans, refresh_every=0, heal_every=1):
+    """按顺序执行多个训练计划, 每个计划为 (train_type, times)。
+
+    例: train_plan([(6, 5), (3, 3), (1, 2)])  # 类型6跑5轮 -> 类型3跑3轮 -> 类型1跑2轮
+    切换训练类型时先刷新页面重新进入训练室选择新类型, 否则已在训练室会直接开始不换类型。
+    """
+    for idx, (times, train_type) in enumerate(plans):
+        print(f"执行计划: 训练类型 {train_type} x {times} 轮")
+        if idx > 0:
+            print("切换训练类型, 刷新页面重新进入训练室")
+            refresh(train_type)
+        train(
+            times=times,
+            train_type=train_type,
+            refresh_every=refresh_every,
+            heal_every=heal_every,
+        )

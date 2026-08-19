@@ -48,7 +48,6 @@ from config.positions import (
 )
 from core.actions import click_img, click_pos, detect
 
-
 # 训练类型 1-6 对应的选择图标
 TRAIN_TYPES = {
     1: img_train_type_1,
@@ -125,19 +124,31 @@ def _fight():
 
 
 def _settle():
-    if detect(img_train_win_confirm, timeout=0.5):
+    """战斗结算: 实际只有三种流程, 胜利确认必须先行, 之后按分支处理, 不再每步都检测。
+
+    情况1: 胜利确认 -> 经验确认 -> 累计经验确认
+    情况2: 胜利确认 -> 升级确认 -> 累计经验确认
+    情况3: 胜利确认 -> 升级确认 -> 技能替换确认 -> 累计经验确认
+    """
+    # 胜利确认(必须, 等待出现)
+    if not detect(img_train_win_confirm, timeout=5):
+        print("未检测到胜利确认")
+    else:
         print("胜利确认")
         click_pos(pos_train_win_confirm)
-    if detect(img_train_upgrade_confirm, timeout=0.5):
-        print("升级确认")
-        click_pos(pos_train_upgrade_confirm)
-    if detect(img_train_exp_confirm, timeout=0.5):
+    # 二选一: 经验确认 或 升级确认
+    if detect(img_train_exp_confirm, timeout=1):
         print("经验确认")
         click_pos(pos_train_exp_confirm)
-    if detect(img_train_cancel_skill, timeout=0.5):
-        print("技能替换确认")
-        click_pos(pos_train_cancel_skill)
-    if detect(img_store_exp_confirm, timeout=0.5):
+    elif detect(img_train_upgrade_confirm, timeout=1):
+        print("升级确认")
+        click_pos(pos_train_upgrade_confirm)
+        # 升级后可选: 技能替换确认(情况3)
+        if detect(img_train_cancel_skill, timeout=1):
+            print("技能替换确认")
+            click_pos(pos_train_cancel_skill)
+    # 两条路径的共同结尾: 累计经验确认
+    if detect(img_store_exp_confirm, timeout=1):
         print("累计经验确认")
         click_pos(pos_store_exp_confirm)
     print("战斗结算完成")
